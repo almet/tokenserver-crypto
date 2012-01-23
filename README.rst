@@ -12,5 +12,5 @@ added code to deal with `HKDF derivation <https://tools.ietf.org/html/rfc5869>`_
 
 When you compile the library, it generates a library and an executable binary.
 The binary is meant to run with `powerhose
-<http://github.com/tziade/powerhose`_, and the exchanged messages are encoded
+<http://github.com/tziade/powerhose>`_, and the exchanged messages are encoded
 using protocol buffers.
