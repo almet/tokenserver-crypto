@@ -1,0 +1,4 @@
+message Response {
+  required bytes salt = 1;
+  required bytes secret = 2;
+}
