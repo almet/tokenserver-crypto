@@ -1,15 +1,12 @@
-#include <iostream>
 #include <fstream>
 
+#include "tokencrypto.h"
 #include "cryptopp/hkdf.h"
 #include "cryptopp/sha.h"
 #include "cryptopp/osrng.h"
 
 using namespace CryptoPP;
 using namespace std;
-
-#define DEFAULT_SALT_SIZE 128
-#define DEFAULT_KEY_SIZE 128
 
 namespace tokencrypto{
 
