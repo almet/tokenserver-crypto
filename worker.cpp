@@ -47,6 +47,10 @@ string deriveSecret(string job, Registry registry) {
     // Derivate the key
     byte* okm = deriveKey(256, (byte*) master, 256, salt, 256);
 
+    cout << "salt" << endl << salt << endl << endl;
+    cout << "okm" << endl << okm << endl << endl;
+    cout << "master" << endl << master << endl << endl;
+
     // return the OKM and the salt XXX check that sizeof is doing what's
     // intended
     Response resp;
@@ -66,6 +70,5 @@ int main(int argc, const char *argv[])
     functions.insert(fderive);
   
     // running 10 workers
-    //
-    return run_workers("token-crypto", 10, &functions, NULL, NULL);
+    return run_workers("token-crypto", 10, &functions, &readMasterSecret, NULL);
 }
