@@ -36,17 +36,10 @@ void readMasterSecret(Registry reg){
  * @param
  **/
  
-string derive_secret(string job, Registry reg) {
+string deriveSecret(string job, Registry registry) {
 
     // get the master secret value from the registry
-    Registry::iterator iter = reg.begin();
-    iter = reg.find("master");
-
-    byte* master;
-
-    if (iter != reg.end()) {
-        master = (byte*) (iter->second).c_str();
-    }
+    byte* master = (byte*) (registry.find("master")->second).c_str();
 
     // Generate the salt
     byte* salt = generateRandomSalt(DEFAULT_SALT_SIZE);
@@ -54,24 +47,25 @@ string derive_secret(string job, Registry reg) {
     // Derivate the key
     byte* okm = deriveKey(256, (byte*) master, 256, salt, 256);
 
-    // return the OKM and the salt
+    // return the OKM and the salt XXX check that sizeof is doing what's
+    // intended
     Response resp;
-    resp.set_salt(&salt, sizeof(salt));
-    resp.set_secret(&okm, sizeof(okm));
+    resp.set_salt(&salt, 256);
+    resp.set_secret(&okm, 256);
 
     string string_resp;
     resp.SerializeToString(&string_resp);
     return string_resp;
 }
 
-
 int main(int argc, const char *argv[])
 {
     // building the map of functions
-    Function fderive = Function("derive_secret", &derive_secret);
+    Function fderive = Function("derive_secret", &deriveSecret);
     Functions functions;
     functions.insert(fderive);
   
     // running 10 workers
-    return run_workers(10, functions, &readMasterSecret, NULL);
+    //
+    return run_workers("token-crypto", 10, &functions, NULL, NULL);
 }

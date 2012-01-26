@@ -1,12 +1,8 @@
-LIBHOSE = ../powerhose/powerhose/libhose/# FIXME (what's the correct way to handle libs?)
+LIBDIR = $(CURDIR)/libs
 BIN = worker
 
-all: copy-libhose protobuf-cpp
-	g++ -o $(BIN) worker.cpp tokencrypto.cpp response.pb.cc libhose.o -Wall -ansi -pedantic-errors -lcryptopp -lpthread -lzmq -lprotobuf
-
-copy-libhose:
-	cp $(LIBHOSE)libhose.o .
-	cp $(LIBHOSE)libhose.h .
+all: protobuf-cpp
+	g++ -g -Wall -o $(BIN) response.pb.cc worker.cpp tokencrypto.cpp -lhose -lcryptopp -lprotobuf -lpthread -lzmq -Wextra -pedantic -I $(LIBDIR) -L $(LIBDIR)
 
 protobuf-cpp:
 	protoc response.proto --cpp_out=.
@@ -19,4 +15,3 @@ protobuf-py:
 
 consume: protobuf-py
 	python consumer.py
-
