@@ -8,7 +8,6 @@
 #include "libhose.h"
 #include "response.pb.h"
 
-
 using namespace tokencrypto;
 using namespace std;
 using namespace powerhose;
@@ -19,7 +18,8 @@ using namespace powerhose;
  * @param Registry reg the registry to use
  * @returns void
  **/
-void readMasterSecret(Registry reg){
+void readMasterSecret(Registry reg)
+{
     string master = (char*) readFile("master");
 
     pair <string, string> master_pair = pair <string, string>("master", master);
@@ -36,7 +36,8 @@ void readMasterSecret(Registry reg){
  * @param
  **/
  
-string deriveSecret(string job, Registry registry) {
+string deriveSecret(string job, Registry registry)
+{
 
     // get the master secret value from the registry
     byte* master = (byte*) (registry.find("master")->second).c_str();
@@ -64,11 +65,7 @@ string deriveSecret(string job, Registry registry) {
 
 int main(int argc, const char *argv[])
 {
-    // building the map of functions
-    Function fderive = Function("derive_secret", &deriveSecret);
-    Functions functions;
-    functions.insert(fderive);
-  
-    // running 10 workers
-    return run_workers("token-crypto", 10, &functions, &readMasterSecret, NULL);
+    map<string, string> reg;
+    readMasterSecret(reg);
+    cout << deriveSecret("", reg);
 }
